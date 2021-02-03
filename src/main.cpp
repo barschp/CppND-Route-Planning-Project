@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <io2d.h>
+#include <limits>
 #include "route_model.h"
 #include "render.h"
 #include "route_planner.h"
@@ -73,7 +74,7 @@ int main(int argc, const char **argv)
 
     // Reset cin in case the previous input didn't meet the spec
     std::cin.clear();
-    std::cin.ignore ( 100 , '\n' ); 
+    std::cin.ignore(std::numeric_limits<int>::max(), '\n' ); 
     
     // Reading user END point
     std::cout << "Please enter the END coordinates as integers in the format xx, yy: ";
