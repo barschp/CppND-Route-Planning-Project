@@ -63,7 +63,7 @@ int main(int argc, const char **argv)
     int end_y;
     char c;
 
-    // Reading user input into navigation input variables
+    // Reading user START
     std::cout << "Please enter the START coordinates as integers in the format xx, yy: ";
     if (std::cin >> start_x >> c >> start_y && c == ',' ){
         std::cout << "Thanks, we will use: [" << start_x << "," << start_y << "] as the START point \n\n";
@@ -75,11 +75,11 @@ int main(int argc, const char **argv)
         std::cout << "We could not read your input and will use: [" << start_x << "," << start_y << "] as the START point \n\n";
     }
 
-    // reset c before next input to detect wrong input properly
-    c = 0;
+    // Reset cin in case the previous input didn't meet the spec
     std::cin.clear();
     std::cin.ignore ( 100 , '\n' ); 
     
+    // Reading user END point
     std::cout << "Please enter the END coordinates as integers in the format xx, yy: ";
     if (std::cin >> end_x >> c >> end_y && c == ',' ){
         std::cout << "Thanks, we will use: [" << end_x << "," << end_y << "] as the END point \n\n";
