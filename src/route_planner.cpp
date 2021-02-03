@@ -10,7 +10,10 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 
     // TODO 2: Use the m_Model.FindClosestNode method to find the closest nodes to the starting and ending coordinates.
     // Store the nodes you find in the RoutePlanner's start_node and end_node attributes.
-
+    start_node = &model.FindClosestNode(start_x, start_y);
+    // std::cout << "This is start x: " << start_node->x << " and this is start y: " << start_node->y << "\n";
+    end_node = &model.FindClosestNode(end_x, end_y);
+    // std::cout << "This is end x: " << end_node->x << " and this is end y: " << end_node->y << "\n";
 }
 
 
@@ -20,7 +23,7 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 // - Node objects have a distance method to determine the distance to another node.
 
 float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
-
+    return node->distance(*end_node);
 }
 
 
@@ -32,7 +35,27 @@ float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
 // - For each node in current_node.neighbors, add the neighbor to open_list and set the node's visited attribute to true.
 
 void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
-
+    // Populate all neighbors of current_node
+    current_node->FindNeighbors();
+    for (RouteModel::Node *current_neighbor : current_node->neighbors) {
+        // storing the g_value to not having to calculate it multiple time
+        float possible_g_value = current_node->g_value + current_node->distance(*current_neighbor);
+        // in case the neighbor is not yet in the open_list
+        if (!current_neighbor->visited){
+            current_neighbor->parent = current_node;
+            current_neighbor->h_value = this->CalculateHValue(current_neighbor);
+            current_neighbor->g_value = possible_g_value;
+            current_neighbor->visited = true;
+            open_list.push_back(current_neighbor);        
+        } 
+        // the node is already in the open list --> see if we found a faster way to reach it
+        else if (current_neighbor->g_value > possible_g_value) {
+            // no need to recalculate h_value and to set visited
+            // OPEN QUESTION: What if the node has already been removed from the open list, because it was processed?
+            current_neighbor->parent = current_node;
+            current_neighbor->g_value = possible_g_value;
+        }
+    }
 }
 
 
