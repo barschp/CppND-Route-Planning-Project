@@ -56,6 +56,12 @@ int main(int argc, const char **argv)
     // user input for these values using std::cin. Pass the user input to the
     // RoutePlanner object below in place of 10, 10, 90, 90.
 
+    //initializing navigation input variables
+    int start_x;
+    int start_y;
+    int end_x;
+    int end_y;
+
     // Build Model.
     RouteModel model{osm_data};
 
