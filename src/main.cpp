@@ -61,15 +61,42 @@ int main(int argc, const char **argv)
     int start_y;
     int end_x;
     int end_y;
+    char c;
 
     // Reading user input into navigation input variables
-    std::cout << "This is just a test \n";
+    std::cout << "Please enter the START coordinates as integers in the format xx, yy: ";
+    if (std::cin >> start_x >> c >> start_y && c == ',' ){
+        std::cout << "Thanks, we will use: [" << start_x << "," << start_y << "] as the START point \n\n";
+    }
+    // Using standard values in case the reading fails and informing the user
+    else {
+        start_x = 10;
+        start_y = 10;
+        std::cout << "We could not read your input and will use: [" << start_x << "," << start_y << "] as the START point \n\n";
+    }
+
+    // reset c before next input to detect wrong input properly
+    c = 0;
+    std::cin.clear();
+    std::cin.ignore ( 100 , '\n' ); 
+    
+    std::cout << "Please enter the END coordinates as integers in the format xx, yy: ";
+    if (std::cin >> end_x >> c >> end_y && c == ',' ){
+        std::cout << "Thanks, we will use: [" << end_x << "," << end_y << "] as the END point \n\n";
+    }
+    // Using standard values in case the reading fails and informing the user
+    else {
+        end_x = 90;
+        end_y = 90;
+        std::cout << "We could not read your input and will use: [" << end_x << "," << end_y << "] as the END point \n\n";
+    }
+
 
     // Build Model.
     RouteModel model{osm_data};
 
     // Create RoutePlanner object and perform A* search.
-    RoutePlanner route_planner{model, 10, 10, 90, 90};
+    RoutePlanner route_planner{model, (float)start_x, (float)start_y, (float)end_x, (float)end_y};
     route_planner.AStarSearch();
 
     std::cout << "Distance: " << route_planner.GetDistance() << " meters. \n";
