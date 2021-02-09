@@ -1,6 +1,12 @@
 #include "route_planner.h"
 #include <algorithm>
 
+bool Compare(const RouteModel::Node* first_node, const RouteModel::Node* second_node){
+    float f_first = first_node->g_value + first_node->h_value;
+    float f_second = second_node->g_value + second_node->h_value;
+    return f_first > f_second;
+}
+
 RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, float end_x, float end_y): m_Model(model) {
     // Convert inputs to percentage:
     start_x *= 0.01;
@@ -67,7 +73,10 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 // - Return the pointer.
 
 RouteModel::Node *RoutePlanner::NextNode() {
-
+    std::sort(open_list.begin(), open_list.end(), Compare);
+    RouteModel::Node *next_Node = open_list.back();
+    open_list.pop_back();
+    return next_Node;
 }
 
 
