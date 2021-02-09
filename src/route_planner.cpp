@@ -74,6 +74,8 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 
 RouteModel::Node *RoutePlanner::NextNode() {
     std::sort(open_list.begin(), open_list.end(), Compare);
+
+    // TODO_self: I should add some handling in case the open list is empty and there is no next node
     RouteModel::Node *next_Node = open_list.back();
     open_list.pop_back();
     return next_Node;
@@ -135,4 +137,18 @@ void RoutePlanner::AStarSearch() {
 
     // TODO: Implement your solution here.
 
+    // initialize with start_node
+    current_node = start_node;
+
+    // iterate until we found the end node
+    while (current_node != end_node)
+    {
+        AddNeighbors(current_node);
+
+        // TODO_self: I should enter handling in case the open list gets empty / there is no next node
+        current_node = NextNode();
+    }
+    
+    // construct final path
+    m_Model.path = ConstructFinalPath(current_node);
 }
