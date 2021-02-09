@@ -140,6 +140,10 @@ void RoutePlanner::AStarSearch() {
     // initialize with start_node
     current_node = start_node;
 
+    current_node->h_value = this->CalculateHValue(current_node);
+    current_node->g_value = 0;
+    current_node->visited = true;
+
     // iterate until we found the end node
     while (current_node != end_node)
     {
